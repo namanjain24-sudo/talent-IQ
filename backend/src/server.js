@@ -1,14 +1,20 @@
 import express from 'express';
-import { ENV } from './lib/env.js';
-
+import path from 'path';
+import {ENV} from "./config/env.js";
 const app = express();
-
-console.log(ENV.PORT)
-console.log(ENV.DB_URL)
+const _dirname = path.resolve();
 
 app.get("/",(req,res)=>{
     res.status(200).json({msg:"success from api"})
 })
+// make our  app ready for deployment
+if(ENV.NODE_ENV === "production"){
+    app.use(express.static(path.join(_dirname,"../frontend/dist")));
+
+    app.get("/{*any}",(req,res)=>{
+        res.sendFile(path.join(_dirname,"../frontend","dist","index.html"));
+    })
+}
 
 app.listen(ENV.PORT,()=>{
     console.log("server is running on port ",ENV.PORT)
