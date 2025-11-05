@@ -5,18 +5,16 @@ import { ENV } from "./lib/env.js";
 const app = express();
 const __dirname = path.resolve();
 
-// ✅ Serve frontend in production
+app.get("/health", (req, res) => {
+    res.status(200).json({msg:"api is working"})
+})
+
 if (ENV.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../frontend/dist")));
 
-  // ✅ Correct wildcard route
-  app.get("*", (req, res) => {
+
+  app.get("/{*any}", (req, res) => {
     res.sendFile(path.join(__dirname, "../frontend", "dist", "index.html"));
-  });
-} else {
-  // ✅ Dev mode: return success JSON for testing
-  app.get("/", (req, res) => {
-    res.status(200).json({ msg: "success from api (dev mode)" });
   });
 }
 
