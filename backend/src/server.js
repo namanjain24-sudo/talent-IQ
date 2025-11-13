@@ -1,25 +1,46 @@
 import express from "express";
 import path from "path";
+import cors from "cors";
+import bodyParser from "body-parser";
+
 import { ENV } from "./lib/env.js";
+import { connectDB } from "./lib/db.js";
+import authRoutes from "./routes/auth.route.js";
 
 const app = express();
 const __dirname = path.resolve();
 
-// ✅ Serve frontend in production
-if (ENV.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "../frontend/dist")));
+// Middleware
+app.use(cors());
+app.use(express.json());
+app.use(bodyParser.json());
 
-  // ✅ Correct wildcard route
+// Routes
+app.use("/auth", authRoutes);
+
+app.get("/health", (req, res) => {
+  res.status(200).json({ msg: "API is up and running 🚀" });
+});
+
+if (ENV.NODE_ENV === "production") {
+  const frontendPath = path.join(__dirname, "../frontend/dist");
+  app.use(express.static(frontendPath));
+
   app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "../frontend", "dist", "index.html"));
-  });
-} else {
-  // ✅ Dev mode: return success JSON for testing
-  app.get("/", (req, res) => {
-    res.status(200).json({ msg: "success from api (dev mode)" });
+    res.sendFile(path.join(frontendPath, "index.html"));
   });
 }
 
-app.listen(ENV.PORT, () => {
-  console.log(`Server is running on port ${ENV.PORT}`);
-});
+// Start Server
+const startServer = async () => {
+  try {
+    await connectDB();
+    app.listen(ENV.PORT, () =>
+      console.log(`✅ Server is running on port: ${ENV.PORT}`)
+    );
+  } catch (error) {
+    console.error("💥 Error starting the server:", error);
+  }
+};
+
+startServer();
