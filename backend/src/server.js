@@ -22,14 +22,14 @@ app.get("/health", (req, res) => {
   res.status(200).json({ msg: "API is up and running 🚀" });
 });
 
-if (ENV.NODE_ENV === "production") {
-  const frontendPath = path.join(__dirname, "../frontend/dist");
-  app.use(express.static(frontendPath));
+// if (ENV.NODE_ENV === "production") {
+//   const frontendPath = path.join(__dirname, "../frontend/dist");
+//   app.use(express.static(frontendPath));
 
-  app.get("*", (req, res) => {
-    res.sendFile(path.join(frontendPath, "index.html"));
-  });
-}
+//   app.get("*", (req, res) => {
+//     res.sendFile(path.join(frontendPath, "index.html"));
+//   });
+// }
 
 // Start Server
 const startServer = async () => {

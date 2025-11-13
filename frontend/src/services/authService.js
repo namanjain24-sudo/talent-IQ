@@ -1,5 +1,5 @@
 // Use relative path for proxy support
-const API_BASE_URL = '/auth';
+const API_BASE_URL = import.meta.env.VITE_API_URL;
 
 // Helper function to get new access token using refresh token
 const refreshAccessToken = async () => {
@@ -9,7 +9,9 @@ const refreshAccessToken = async () => {
       throw new Error('No refresh token available');
     }
 
-    const response = await fetch(`${API_BASE_URL}/refresh-token`, {
+    console.log(API_BASE_URL)
+
+    const response = await fetch(`${API_BASE_URL}/auth/refresh-token`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -38,7 +40,7 @@ const refreshAccessToken = async () => {
 // Register user
 const register = async (userData) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/signup`, {
+    const response = await fetch(`${API_BASE_URL}/auth/signup`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -68,7 +70,7 @@ const register = async (userData) => {
 // Login user
 const login = async (userData) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/login`, {
+    const response = await fetch(`${API_BASE_URL}/auth/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -102,7 +104,7 @@ const logout = async () => {
     
     // Call backend logout endpoint to invalidate refresh token
     if (refreshToken) {
-      await fetch(`${API_BASE_URL}/logout`, {
+      await fetch(`${API_BASE_URL}/auth/logout`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -128,7 +130,7 @@ const logoutAll = async () => {
     
     // Call backend logout-all endpoint to invalidate all refresh tokens
     if (token) {
-      await fetch(`${API_BASE_URL}/logout-all`, {
+      await fetch(`${API_BASE_URL}/auth/logout-all`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
