@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import './App.css';
 import LandingPage from './components/LandingPage';
 import Login from './components/Login';
 import Register from './components/Register';
@@ -22,18 +21,20 @@ function App() {
   };
 
   const handleLogout = async () => {
-    await authService.logout();
-    setIsLoggedIn(false);
+    try {
+      await authService.logout();
+      setIsLoggedIn(false);
+    } catch (error) {
+      console.error('Logout failed:', error);
+      // Even if API call fails, clear local state
+      setIsLoggedIn(false);
+    }
   };
 
   return (
     <div className="App">
       <header className="app-header">
-        {isLoggedIn && (
-          <button onClick={handleLogout} className="logout-button">
-            Logout
-          </button>
-        )}
+        {/* Logout button removed from header - only appears in Dashboard now */}
       </header>
       <main className="app-main">
         <Routes>
