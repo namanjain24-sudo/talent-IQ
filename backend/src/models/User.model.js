@@ -23,6 +23,10 @@ const UserSchema = new mongoose.Schema({
     required: [true, 'Please provide a password'],
     minlength: [4, 'Password must be at least 4 characters']
   },
+  profileImage: {
+    type: String,
+    default: "",
+  },
   refreshTokens: {
     type: [String],
     default: []

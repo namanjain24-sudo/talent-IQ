@@ -1,15 +1,11 @@
-// Use relative path for proxy support
-const API_BASE_URL = import.meta.env.VITE_API_URL;
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
-// Helper function to get new access token using refresh token
 const refreshAccessToken = async () => {
   try {
     const refreshToken = localStorage.getItem('refreshToken');
     if (!refreshToken) {
       throw new Error('No refresh token available');
     }
-
-    console.log(API_BASE_URL)
 
     const response = await fetch(`${API_BASE_URL}/auth/refresh-token`, {
       method: 'POST',
@@ -32,12 +28,11 @@ const refreshAccessToken = async () => {
     }
   } catch (error) {
     console.error('Token refresh error:', error);
-    logout(); // Clear all tokens if refresh fails
+    logout();
     throw error;
   }
 };
 
-// Register user
 const register = async (userData) => {
   try {
     const response = await fetch(`${API_BASE_URL}/auth/signup`, {
@@ -51,7 +46,6 @@ const register = async (userData) => {
     const data = await response.json();
     
     if (response.ok && data.accessToken) {
-      // Save tokens and user data to localStorage
       localStorage.setItem('token', data.accessToken);
       localStorage.setItem('refreshToken', data.refreshToken);
       localStorage.setItem('user', JSON.stringify(data.user));
@@ -67,7 +61,6 @@ const register = async (userData) => {
   }
 };
 
-// Login user
 const login = async (userData) => {
   try {
     const response = await fetch(`${API_BASE_URL}/auth/login`, {
@@ -81,7 +74,6 @@ const login = async (userData) => {
     const data = await response.json();
     
     if (response.ok && data.accessToken) {
-      // Save tokens and user data to localStorage
       localStorage.setItem('token', data.accessToken);
       localStorage.setItem('refreshToken', data.refreshToken);
       localStorage.setItem('user', JSON.stringify(data.user));
@@ -97,14 +89,12 @@ const login = async (userData) => {
   }
 };
 
-// Logout user
 const logout = async () => {
   try {
     const refreshToken = localStorage.getItem('refreshToken');
     
-    // Call backend logout endpoint to invalidate refresh token
     if (refreshToken) {
-      await fetch(`${API_BASE_URL}/auth/logout`, {
+      const response = await fetch(`${API_BASE_URL}/auth/logout`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -112,23 +102,24 @@ const logout = async () => {
         },
         body: JSON.stringify({ refreshToken }),
       });
+      
+      if (!response.ok) {
+        console.warn('Logout API warning:', response.status, response.statusText);
+      }
     }
   } catch (error) {
     console.error('Logout API error:', error);
   } finally {
-    // Clear all local storage regardless of API success
     localStorage.removeItem('token');
     localStorage.removeItem('refreshToken');
     localStorage.removeItem('user');
   }
 };
 
-// Logout from all devices
 const logoutAll = async () => {
   try {
     const token = localStorage.getItem('token');
     
-    // Call backend logout-all endpoint to invalidate all refresh tokens
     if (token) {
       await fetch(`${API_BASE_URL}/auth/logout-all`, {
         method: 'POST',
@@ -141,34 +132,28 @@ const logoutAll = async () => {
   } catch (error) {
     console.error('Logout all API error:', error);
   } finally {
-    // Clear all local storage regardless of API success
     localStorage.removeItem('token');
     localStorage.removeItem('refreshToken');
     localStorage.removeItem('user');
   }
 };
 
-// Get token
 const getToken = () => {
   return localStorage.getItem('token');
 };
 
-// Get user
 const getUser = () => {
   const user = localStorage.getItem('user');
   return user ? JSON.parse(user) : null;
 };
 
-// Check if user is logged in
 const isLoggedIn = () => {
   return !!getToken();
 };
 
-// Make authenticated request with automatic token refresh
 const authenticatedRequest = async (url, options = {}) => {
   let token = getToken();
   
-  // Add authorization header
   const headers = {
     'Content-Type': 'application/json',
     ...options.headers,
@@ -183,7 +168,6 @@ const authenticatedRequest = async (url, options = {}) => {
     headers,
   });
   
-  // If unauthorized, try to refresh token
   if (response.status === 401) {
     try {
       const newToken = await refreshAccessToken();
@@ -196,7 +180,6 @@ const authenticatedRequest = async (url, options = {}) => {
       
       return retryResponse;
     } catch (refreshError) {
-      // If refresh fails, redirect to login
       window.location.href = '/login';
       throw refreshError;
     }

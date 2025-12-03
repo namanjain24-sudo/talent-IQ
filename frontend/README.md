@@ -1,12 +1,70 @@
-# React + Vite
+# Talent-IQ
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Talent-IQ is a full-stack web application built with React, Node.js, and MongoDB.
 
-Currently, two official plugins are available:
+## Project URLs
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Frontend
+- **Hosted URL**: https://talent-iq-rose.vercel.app
+- **Local Development**: http://localhost:5173
 
-## Expanding the ESLint configuration
+### Backend
+- **Hosted API**: https://talent-iq-1-9t0n.onrender.com
+- **Local Development**: http://localhost:3000
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Database
+- **MongoDB Atlas**: mongodb+srv://naman:wbSdSUwNeJIBgqsa@cluster0.jogmaxt.mongodb.net/
+
+## Authentication Endpoints
+
+- **Login**: `/auth/login`
+- **Register**: `/auth/signup`
+- **Refresh Token**: `/auth/refresh-token`
+- **Logout**: `/auth/logout`
+- **Logout All Devices**: `/auth/logout-all`
+
+## Available Scripts
+
+### Root Directory
+- `npm run build` - Install dependencies for both frontend and backend, then build the frontend
+- `npm run start` - Start the backend server
+
+### Frontend
+- `npm run dev` - Start the development server
+- `npm run build` - Build the production version
+- `npm run preview` - Preview the production build
+
+### Backend
+- `npm run dev` - Start the development server with nodemon
+- `npm run start` - Start the production server
+
+## Environment Variables
+
+### Frontend (.env)
+- `VITE_API_URL` - Backend API URL
+
+### Backend (.env)
+- `PORT` - Server port
+- `DB_URL` - MongoDB connection string
+- `JWT_SECRET` - Secret for access tokens
+- `JWT_SECRET_REFRESH` - Secret for refresh tokens
+- `JWT_EXPIRE` - Access token expiration time
+- `JWT_REFRESH_EXPIRE` - Refresh token expiration time
+- `NODE_ENV` - Environment (production/development)
+- `CLIENT_URL` - Frontend URL for CORS
+
+## Tech Stack
+
+- **Frontend**: React, Vite, Tailwind CSS, React Router
+- **Backend**: Node.js, Express.js
+- **Database**: MongoDB (Mongoose ODM)
+- **Authentication**: JWT (JSON Web Tokens)
+- **Deployment**: Vercel (Frontend), Render (Backend)
+
+## Features
+
+- User authentication (login/register)
+- JWT-based session management
+- Refresh token implementation
+- Protected routes
+- Responsive UI with Tailwind CSS
