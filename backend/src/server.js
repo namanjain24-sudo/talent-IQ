@@ -6,6 +6,8 @@ import bodyParser from "body-parser";
 import { ENV } from "./lib/env.js";
 import { connectDB } from "./lib/db.js";
 import authRoutes from "./routes/auth.route.js";
+import chatRoutes from "./routes/chatRoutes.js";
+import sessionRoutes from "./routes/sessionRoute.js";
 
 const app = express();
 const __dirname = path.resolve();
@@ -24,19 +26,12 @@ app.use(bodyParser.json());
 
 // Routes
 app.use("/auth", authRoutes);
+app.use("/api/chat", chatRoutes);
+app.use("/api/sessions", sessionRoutes);
 
 app.get("/health", (req, res) => {
   res.status(200).json({ msg: "API is up and running 🚀" });
 });
-
-// if (ENV.NODE_ENV === "production") {
-//   const frontendPath = path.join(__dirname, "../frontend/dist");
-//   app.use(express.static(frontendPath));
-
-//   app.get("*", (req, res) => {
-//     res.sendFile(path.join(frontendPath, "index.html"));
-//   });
-// }
 
 // Start Server
 const startServer = async () => {
@@ -49,5 +44,6 @@ const startServer = async () => {
     console.error("💥 Error starting the server:", error);
   }
 };
+
 
 startServer();

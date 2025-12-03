@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { useNavigate } from 'react-router-dom';
-import authService from "../services/authService"
+import authService from "../lib/auth"
 import { Mail, Lock, Loader2, Eye, EyeOff, Chrome, CheckCircle2 } from "lucide-react"
 
 const Login = ({ onLoginSuccess }) => {

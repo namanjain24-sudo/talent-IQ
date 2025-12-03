@@ -18,7 +18,8 @@
   },
   "homepage": "https://github.com/namanjain24-sudo/talent-IQ#readme",
   "description": "",
-  "devDependencies": {
-    "treeview-cli": "^2.1.3"
+  "dependencies": {
+    "@stream-io/node-sdk": "^0.7.22",
+    "stream-chat": "^9.26.0"
   }
 }
