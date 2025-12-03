@@ -70,8 +70,7 @@ export const useJoinSession = () => {
   const result = useMutation({
     mutationKey: ["joinSession"],
     mutationFn: sessionApi.joinSession,
-    onSuccess: () => toast.success("Joined session successfully!"),
-    onError: (error) => toast.error(error.response?.data?.message || "Failed to join session"),
+    // Remove automatic toast notifications - let calling component handle them
   });
 
   return result;
@@ -81,8 +80,7 @@ export const useLeaveSession = () => {
   const result = useMutation({
     mutationKey: ["leaveSession"],
     mutationFn: sessionApi.leaveSession,
-    onSuccess: () => toast.success("Left session successfully!"),
-    onError: (error) => toast.error(error.response?.data?.message || "Failed to leave session"),
+    // Remove automatic toast notifications - let calling component handle them
   });
 
   return result;
@@ -92,8 +90,7 @@ export const useEndSession = () => {
   const result = useMutation({
     mutationKey: ["endSession"],
     mutationFn: sessionApi.endSession,
-    onSuccess: () => toast.success("Session ended successfully!"),
-    onError: (error) => toast.error(error.response?.data?.message || "Failed to end session"),
+    // Remove automatic toast notifications - let calling component handle them
   });
 
   return result;

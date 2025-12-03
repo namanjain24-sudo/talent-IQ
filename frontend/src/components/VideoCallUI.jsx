@@ -86,7 +86,12 @@ function VideoCallUI({ chatClient, channel }) {
                 <Chat client={chatClient} theme="str-chat__theme-dark">
                   <Channel channel={channel}>
                     <Window>
-                      <MessageList />
+                      <MessageList 
+                        messageActions={["react", "reply", "mute", "flag", "pin"]}
+                        disableQuotedMessages={false}
+                        hideDeletedMessages={false}
+                        separateReplies={true}
+                      />
                       <MessageInput />
                     </Window>
                     <Thread />
@@ -100,4 +105,5 @@ function VideoCallUI({ chatClient, channel }) {
     </div>
   );
 }
+
 export default VideoCallUI;

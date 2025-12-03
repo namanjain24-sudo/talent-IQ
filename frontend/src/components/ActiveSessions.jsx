@@ -94,7 +94,7 @@ function ActiveSessions({ sessions, isLoading, isUserInSession, user }) {
                         className="btn btn-primary btn-sm w-full"
                         disabled={!!session.participant && session.participant?._id?.toString() !== currentUser?._id?.toString()}
                       >
-                        {session.participant && session.participant?._id?.toString() !== currentUser?._id?.toString() ? "Full" : "Join Session"}
+                        {session.participant && session.participant?._id?.toString() !== currentUser?._id?.toString() ? "Session Full (2/2)" : "Join Session"}
                       </button>
                     )}
                     {userInSession && (

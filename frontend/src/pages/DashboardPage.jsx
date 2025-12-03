@@ -9,6 +9,7 @@ import ActiveSessions from "../components/ActiveSessions";
 import RecentSessions from "../components/RecentSessions";
 import CreateSessionModal from "../components/CreateSessionModal";
 import authService from "../lib/auth";
+import toast from "react-hot-toast";
 
 function DashboardPage({ onLogout }) {
   const navigate = useNavigate();
@@ -17,7 +18,6 @@ function DashboardPage({ onLogout }) {
   const [roomConfig, setRoomConfig] = useState({ problem: "", difficulty: "easy" });
 
   const createSessionMutation = useCreateSession();
-
   const { data: activeSessionsData, isLoading: loadingActiveSessions, refetch: refetchActiveSessions } = useActiveSessions();
   const { data: recentSessionsData, isLoading: loadingRecentSessions } = useMyRecentSessions();
 
@@ -46,9 +46,13 @@ function DashboardPage({ onLogout }) {
       },
       {
         onSuccess: (data) => {
+          toast.success("Session created successfully!");
           setShowCreateModal(false);
           navigate(`/session/${data.session._id}`);
         },
+        onError: (error) => {
+          toast.error(error.response?.data?.message || "Failed to create session");
+        }
       }
     );
   };

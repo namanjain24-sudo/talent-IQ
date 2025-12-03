@@ -24,11 +24,11 @@ export async function createSession(req, res) {
       },
     });
 
-    // chat messaging
+    // chat messaging - create channel with both host and empty participant slot
     const channel = chatServer.channel("messaging", callId, {
       name: `${problem} Session`,
       created_by_id: userId.toString(), // Use MongoDB _id
-      members: [userId.toString()], // Use MongoDB _id
+      members: [userId.toString()], // Initially only host is member
     });
 
     await channel.create();
@@ -108,25 +108,25 @@ export async function joinSession(req, res) {
       return res.status(400).json({ message: "Host cannot join their own session as participant" });
     }
 
-    // Allow rejoining if user was the previous participant (they left)
-    const wasPreviousParticipant = session.participant?.toString() === userId.toString();
-    
-    // check if session is already full - has a different participant
-    if (session.participant && !wasPreviousParticipant) {
-      return res.status(409).json({ message: "Session is full" });
+    // Check if user is already a participant
+    if (session.participant && session.participant.toString() === userId.toString()) {
+      return res.status(200).json({ session, message: "Already joined this session" });
     }
 
-    // If user was previous participant, they're rejoining (participant already set)
-    // Otherwise, set them as new participant
-    if (!wasPreviousParticipant) {
-      session.participant = userId;
+    // Check if session is already full - has a different participant
+    if (session.participant) {
+      return res.status(409).json({ message: "Session is full - maximum 2 participants allowed" });
     }
+
+    // Set user as participant
+    session.participant = userId;
     await session.save();
 
+    // Add user to chat channel
     const channel = chatServer.channel("messaging", session.callId);
     await channel.addMembers([userId.toString()]); // Use MongoDB _id
 
-    res.status(200).json({ session });
+    res.status(200).json({ session, message: "Joined session successfully" });
   } catch (error) {
     console.log("Error in joinSession controller:", error.message);
     res.status(500).json({ message: "Internal Server Error" });

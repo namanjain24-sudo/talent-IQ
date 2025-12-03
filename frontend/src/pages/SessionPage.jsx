@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useEndSession, useJoinSession, useSessionById } from "../hooks/useSessionQueries";
+import { useEndSession, useJoinSession, useLeaveSession, useSessionById } from "../hooks/useSessionQueries";
 import { PROBLEMS } from "../data/problems";
 import { executeCode } from "../lib/piston";
 import Navbar from "../components/Navbar";
@@ -10,6 +10,7 @@ import { Loader2Icon, LogOutIcon, PhoneOffIcon } from "lucide-react";
 import CodeEditorPanel from "../components/CodeEditorPanel";
 import OutputPanel from "../components/OutputPanel";
 import authService from "../lib/auth";
+import toast from "react-hot-toast";
 
 import useStreamClient from "../hooks/useStreamClient";
 import { StreamCall, StreamVideo } from "@stream-io/video-react-sdk";
@@ -25,6 +26,7 @@ function SessionPage() {
   const { data: sessionData, isLoading: loadingSession, refetch } = useSessionById(id);
 
   const joinSessionMutation = useJoinSession();
+  const leaveSessionMutation = useLeaveSession();
   const endSessionMutation = useEndSession();
 
   const session = sessionData?.session;
@@ -47,14 +49,36 @@ function SessionPage() {
   const [code, setCode] = useState(problemData?.starterCode?.[selectedLanguage] || "");
 
   // auto-join session if user is not already a participant and not the host
+  const [hasAttemptedJoin, setHasAttemptedJoin] = useState(false);
+  
   useEffect(() => {
     if (!session || !user || loadingSession) return;
     if (isHost || isParticipant) return;
+    
+    // Prevent multiple join attempts
+    if (joinSessionMutation.isPending || hasAttemptedJoin) return;
+    
+    // Mark that we've attempted to join
+    setHasAttemptedJoin(true);
 
-    joinSessionMutation.mutate(id, { onSuccess: refetch });
+    joinSessionMutation.mutate(id, { 
+      onSuccess: (data) => {
+        // Only show success message if it's a new join (not already joined)
+        if (data.message === "Joined session successfully") {
+          toast.success(data.message);
+        }
+        refetch();
+      },
+      onError: (error) => {
+        toast.error(error.response?.data?.message || "Failed to join session");
+        // Reset join attempt flag on error so user can try again
+        setHasAttemptedJoin(false);
+      }
+    });
 
-    // remove the joinSessionMutation, refetch from dependencies to avoid infinite loop
-  }, [session, user, loadingSession, isHost, isParticipant, id]);
+    // Remove joinSessionMutation from dependencies to avoid infinite loop
+    // We check for isPending above instead
+  }, [session, user, loadingSession, isHost, isParticipant, id, refetch, hasAttemptedJoin]);
 
   // redirect the "participant" when session ends
   useEffect(() => {
@@ -91,7 +115,30 @@ function SessionPage() {
   const handleEndSession = () => {
     if (confirm("Are you sure you want to end this session? All participants will be notified.")) {
       // this will navigate the HOST to dashboard
-      endSessionMutation.mutate(id, { onSuccess: () => navigate("/dashboard") });
+      endSessionMutation.mutate(id, { 
+        onSuccess: () => {
+          toast.success("Session ended successfully!");
+          navigate("/dashboard");
+        },
+        onError: (error) => {
+          toast.error(error.response?.data?.message || "Failed to end session");
+        }
+      });
+    }
+  };
+
+  const handleLeaveSession = () => {
+    if (confirm("Are you sure you want to leave this session?")) {
+      // this will navigate the PARTICIPANT to dashboard
+      leaveSessionMutation.mutate(id, { 
+        onSuccess: () => {
+          toast.success("Left session successfully!");
+          navigate("/dashboard");
+        },
+        onError: (error) => {
+          toast.error(error.response?.data?.message || "Failed to leave session");
+        }
+      });
     }
   };
 
@@ -144,6 +191,20 @@ function SessionPage() {
                               <LogOutIcon className="w-4 h-4" />
                             )}
                             End Session
+                          </button>
+                        )}
+                        {!isHost && isParticipant && session?.status === "active" && (
+                          <button
+                            onClick={handleLeaveSession}
+                            disabled={leaveSessionMutation.isPending}
+                            className="btn btn-warning btn-sm gap-2"
+                          >
+                            {leaveSessionMutation.isPending ? (
+                              <Loader2Icon className="w-4 h-4 animate-spin" />
+                            ) : (
+                              <LogOutIcon className="w-4 h-4" />
+                            )}
+                            Leave Session
                           </button>
                         )}
                         {session?.status === "completed" && (
