@@ -8,7 +8,7 @@ import {
   LoaderIcon,
 } from "lucide-react";
 import { Link } from "react-router-dom";
-import { getDifficultyBadgeClass } from "../lib/utils";
+// import { getDifficultyBadgeClass } from "../lib/utils";
 import authService from "../lib/auth";
 
 function ActiveSessions({ sessions, isLoading, isUserInSession, user }) {
