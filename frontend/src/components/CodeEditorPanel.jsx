@@ -1,5 +1,11 @@
-import { Select, Button, Spin } from "antd";
+import { Select, Button } from "antd";
 import { PlayIcon } from "lucide-react";
+import Editor from "react-simple-code-editor";
+import { highlight, languages } from "prismjs";
+import "prismjs/components/prism-javascript";
+import "prismjs/components/prism-python";
+import "prismjs/components/prism-java";
+import "prismjs/themes/prism.css";
 
 const CodeEditorPanel = ({
   selectedLanguage,
@@ -9,6 +15,20 @@ const CodeEditorPanel = ({
   onCodeChange,
   onRunCode,
 }) => {
+  // Get the appropriate Prism language parser
+  const getLanguageParser = (language) => {
+    switch (language) {
+      case "javascript":
+        return languages.javascript;
+      case "python":
+        return languages.python;
+      case "java":
+        return languages.java;
+      default:
+        return languages.javascript;
+    }
+  };
+
   return (
     <div className="h-full flex flex-col">
       {/* Toolbar */}
@@ -43,11 +63,21 @@ const CodeEditorPanel = ({
 
       {/* Code Editor Area */}
       <div className="flex-1 overflow-hidden">
-        <textarea
+        <Editor
           value={code}
-          onChange={(e) => onCodeChange(e.target.value)}
-          className="w-full h-full p-4 font-mono text-sm bg-base-200 resize-none focus:outline-none"
-          spellCheck="false"
+          onValueChange={onCodeChange}
+          highlight={(code) => highlight(code, getLanguageParser(selectedLanguage), selectedLanguage)}
+          className="w-full h-full font-mono text-sm bg-base-200 resize-none focus:outline-none"
+          textareaClassName="focus:outline-none"
+          padding={16}
+          style={{
+            minHeight: "100%",
+            fontFamily: '"Fira code", "Fira Mono", monospace',
+          }}
+          // Enable better editing features
+          tabSize={2}
+          insertSpaces={true}
+          ignoreTabKey={false}
         />
       </div>
     </div>
