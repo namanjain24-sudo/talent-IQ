@@ -56,9 +56,9 @@ const Login = ({ onLoginSuccess }) => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950 flex items-center justify-center p-4 relative overflow-hidden">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute -top-40 -right-40 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-pulse"></div>
         <div
-          className="absolute -bottom-40 -left-40 w-96 h-96 bg-cyan-600/10 rounded-full blur-3xl animate-pulse"
+          className="absolute -bottom-40 -left-40 w-96 h-96 bg-primary/5 rounded-full blur-3xl animate-pulse"
           style={{ animationDelay: "1.5s" }}
         ></div>
       </div>
@@ -68,7 +68,7 @@ const Login = ({ onLoginSuccess }) => {
           {/* <div className="inline-flex items-center justify-center w-14 h-14 rounded-xl bg-gradient-to-br from-blue-600 to-cyan-600 mb-4 shadow-lg shadow-blue-600/30"> */}
             {/* <code className="text-white font-bold text-xl">&lt;/&gt;</code> */}
           {/* </div> */}
-          <h1 className="text-4xl font-bold text-white mb-2 tracking-tight">CodeFlow</h1>
+          <h1 className="text-4xl font-bold text-primary mb-2 tracking-tight">TALENT IQ</h1>
           <p className="text-gray-400 text-sm font-medium">Collaborative Code Interviews & Practice</p>
         </div> 
 

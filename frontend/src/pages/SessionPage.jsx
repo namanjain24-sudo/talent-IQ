@@ -155,16 +155,16 @@ function SessionPage() {
               <Panel defaultSize={50} minSize={20}>
                 <div className="h-full overflow-y-auto bg-base-200">
                   {/* HEADER SECTION */}
-                  <div className="p-6 bg-base-100 border-b border-base-300">
+                  <div className="p-6 bg-base-200/50 border-b border-primary/10">
                     <div className="flex items-start justify-between mb-3">
                       <div>
-                        <h1 className="text-3xl font-bold text-base-content">
+                        <h1 className="text-2xl font-bold text-base-content">
                           {session?.problem || "Loading..."}
                         </h1>
                         {problemData?.category && (
-                          <p className="text-base-content/60 mt-1">{problemData.category}</p>
+                          <p className="text-base-content/50 mt-1 text-sm">{problemData.category}</p>
                         )}
-                        <p className="text-base-content/60 mt-2">
+                        <p className="text-base-content/50 mt-2 text-sm">
                           Host: {session?.host?.name || "Loading..."} •{" "}
                           {session?.participant ? 2 : 1}/2 participants
                         </p>
@@ -172,9 +172,11 @@ function SessionPage() {
 
                       <div className="flex items-center gap-3">
                         <span
-                          className={`badge badge-lg ${getDifficultyBadgeClass(
-                            session?.difficulty
-                          )}`}
+                          className={`px-3 py-1.5 text-sm font-semibold rounded ${
+                            session?.difficulty === 'easy' ? 'bg-primary/10 text-primary' :
+                            session?.difficulty === 'medium' ? 'bg-warning/10 text-warning' :
+                            'bg-error/10 text-error'
+                          }`}
                         >
                           {session?.difficulty.slice(0, 1).toUpperCase() +
                             session?.difficulty.slice(1) || "Easy"}
@@ -183,7 +185,7 @@ function SessionPage() {
                           <button
                             onClick={handleEndSession}
                             disabled={endSessionMutation.isPending}
-                            className="btn btn-error btn-sm gap-2"
+                            className="px-4 py-2 bg-error hover:bg-error/90 text-white rounded-lg text-sm font-semibold transition-all duration-200 flex items-center gap-2"
                           >
                             {endSessionMutation.isPending ? (
                               <Loader2Icon className="w-4 h-4 animate-spin" />
@@ -197,7 +199,7 @@ function SessionPage() {
                           <button
                             onClick={handleLeaveSession}
                             disabled={leaveSessionMutation.isPending}
-                            className="btn btn-warning btn-sm gap-2"
+                            className="px-4 py-2 bg-warning hover:bg-warning/90 text-white rounded-lg text-sm font-semibold transition-all duration-200 flex items-center gap-2"
                           >
                             {leaveSessionMutation.isPending ? (
                               <Loader2Icon className="w-4 h-4 animate-spin" />
@@ -208,7 +210,7 @@ function SessionPage() {
                           </button>
                         )}
                         {session?.status === "completed" && (
-                          <span className="badge badge-ghost badge-lg">Completed</span>
+                          <span className="px-3 py-1.5 bg-base-300/50 text-base-content/60 text-sm font-semibold rounded">Completed</span>
                         )}
                       </div>
                     </div>
@@ -217,12 +219,12 @@ function SessionPage() {
                   <div className="p-6 space-y-6">
                     {/* problem desc */}
                     {problemData?.description && (
-                      <div className="bg-base-100 rounded-xl shadow-sm p-5 border border-base-300">
-                        <h2 className="text-xl font-bold mb-4 text-base-content">Description</h2>
-                        <div className="space-y-3 text-base leading-relaxed">
-                          <p className="text-base-content/90">{problemData.description.text}</p>
+                      <div className="bg-base-200/50 rounded-lg p-5 border border-primary/10">
+                        <h2 className="text-lg font-bold mb-3 text-base-content">Description</h2>
+                        <div className="space-y-3 text-sm leading-relaxed">
+                          <p className="text-base-content/80">{problemData.description.text}</p>
                           {problemData.description.notes?.map((note, idx) => (
-                            <p key={idx} className="text-base-content/90">
+                            <p key={idx} className="text-base-content/80">
                               {note}
                             </p>
                           ))}

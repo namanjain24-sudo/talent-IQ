@@ -4,13 +4,16 @@ import { formatDistanceToNow } from "date-fns";
 
 function RecentSessions({ sessions, isLoading }) {
   return (
-    <div className="card bg-base-100 border-2 border-accent/20 hover:border-accent/30 mt-8">
-      <div className="card-body">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="p-2 bg-gradient-to-br from-accent to-secondary rounded-xl">
-            <Clock className="w-5 h-5 text-white" />
+    <div className="p-8 glass-effect rounded-2xl mt-8 animate-fade-in">
+      <div>
+        <div className="flex items-center gap-4 mb-8">
+          <div className="p-3 bg-primary/10 rounded-xl">
+            <Clock className="w-6 h-6 text-primary" />
           </div>
-          <h2 className="text-2xl font-black">Your Past Sessions</h2>
+          <div>
+            <h2 className="text-2xl font-bold">Your Past Sessions</h2>
+            <p className="text-sm text-base-content/50 mt-0.5">Review your coding history</p>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -19,49 +22,54 @@ function RecentSessions({ sessions, isLoading }) {
               <Loader className="w-10 h-10 animate-spin text-primary" />
             </div>
           ) : sessions.length > 0 ? (
-            sessions.map((session) => (
+            sessions.map((session, index) => (
               <div
                 key={session._id}
-                className={`card relative ${
+                className={`group relative p-6 rounded-xl border transition-all duration-300 ${
                   session.status === "active"
-                    ? "bg-success/10 border-success/30 hover:border-success/60"
-                    : "bg-base-200 border-base-300 hover:border-primary/30"
+                    ? "bg-primary/5 border-primary/30 hover:border-primary/50"
+                    : "bg-base-300/20 border-primary/10 hover:border-primary/30 hover:bg-base-300/30"
                 }`}
+                style={{ animationDelay: `${index * 0.05}s` }}
               >
                 {session.status === "active" && (
-                  <div className="absolute top-3 right-3">
-                    <div className="badge badge-success gap-1">
-                      <div className="w-1.5 h-1.5 bg-success rounded-full animate-pulse" />
+                  <div className="absolute top-4 right-4">
+                    <div className="px-3 py-1.5 bg-primary/10 text-primary text-xs font-bold rounded-lg flex items-center gap-2">
+                      <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
                       ACTIVE
                     </div>
                   </div>
                 )}
 
-                <div className="card-body p-5">
-                  <div className="flex items-start gap-3 mb-4">
+                <div>
+                  <div className="flex items-start gap-4 mb-5">
                     <div
-                      className={`w-12 h-12 rounded-xl flex items-center justify-center ${
+                      className={`w-14 h-14 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform ${
                         session.status === "active"
-                          ? "bg-gradient-to-br from-success to-success/70"
-                          : "bg-gradient-to-br from-primary to-secondary"
+                          ? "bg-primary/10"
+                          : "bg-primary/10"
                       }`}
                     >
-                      <Code2 className="w-6 h-6 text-white" />
+                      <Code2 className="w-7 h-7 text-primary" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h3 className="font-bold text-base mb-1 truncate">{session.problem}</h3>
+                      <h3 className="font-bold text-lg mb-2 truncate">{session.problem}</h3>
                       <span
-                        className={`badge badge-sm ${getDifficultyBadgeClass(session.difficulty)}`}
+                        className={`px-2.5 py-1 text-xs font-bold rounded-lg ${
+                          session.difficulty === 'easy' ? 'bg-primary/10 text-primary' :
+                          session.difficulty === 'medium' ? 'bg-warning/10 text-warning' :
+                          'bg-error/10 text-error'
+                        }`}
                       >
                         {session.difficulty}
                       </span>
                     </div>
                   </div>
 
-                  <div className="space-y-2 text-sm opacity-80 mb-4">
+                  <div className="space-y-3 text-sm text-base-content/60 mb-5">
                     <div className="flex items-center gap-2">
                       <Clock className="w-4 h-4" />
-                      <span>
+                      <span className="font-medium">
                         {formatDistanceToNow(new Date(session.createdAt), {
                           addSuffix: true,
                         })}
@@ -69,16 +77,16 @@ function RecentSessions({ sessions, isLoading }) {
                     </div>
                     <div className="flex items-center gap-2">
                       <Users className="w-4 h-4" />
-                      <span>
+                      <span className="font-medium">
                         {session.participant ? "2" : "1"} participant
                         {session.participant ? "s" : ""}
                       </span>
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between pt-3 border-t border-base-300">
-                    <span className="text-xs font-semibold opacity-80 uppercase">Completed</span>
-                    <span className="text-xs opacity-40">
+                  <div className="flex items-center justify-between pt-4 border-t border-primary/10">
+                    <span className="text-xs font-bold text-base-content/60 uppercase tracking-wide">Completed</span>
+                    <span className="text-xs text-base-content/40 font-medium">
                       {new Date(session.updatedAt).toLocaleDateString()}
                     </span>
                   </div>
@@ -87,11 +95,11 @@ function RecentSessions({ sessions, isLoading }) {
             ))
           ) : (
             <div className="col-span-full text-center py-16">
-              <div className="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-accent/20 to-secondary/20 rounded-3xl flex items-center justify-center">
-                <Trophy className="w-10 h-10 text-accent/50" />
+              <div className="w-16 h-16 mx-auto mb-4 bg-primary/10 rounded-2xl flex items-center justify-center">
+                <Trophy className="w-8 h-8 text-primary/50" />
               </div>
-              <p className="text-lg font-semibold opacity-70 mb-1">No sessions yet</p>
-              <p className="text-sm opacity-50">Start your coding journey today!</p>
+              <p className="text-base font-semibold text-base-content/70 mb-1">No sessions yet</p>
+              <p className="text-sm text-base-content/50">Start your coding journey today!</p>
             </div>
           )}
         </div>

@@ -85,9 +85,9 @@ const Register = ({ onRegisterSuccess }) => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950 flex items-center justify-center p-4 relative overflow-hidden">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute -top-40 -right-40 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-pulse"></div>
         <div
-          className="absolute -bottom-40 -left-40 w-96 h-96 bg-cyan-600/10 rounded-full blur-3xl animate-pulse"
+          className="absolute -bottom-40 -left-40 w-96 h-96 bg-primary/5 rounded-full blur-3xl animate-pulse"
           style={{ animationDelay: "1.5s" }}
         ></div>
       </div>
@@ -97,7 +97,7 @@ const Register = ({ onRegisterSuccess }) => {
           {/* <div className="inline-flex items-center justify-center w-14 h-14 rounded-xl bg-gradient-to-br from-blue-600 to-cyan-600 mb-4 shadow-lg shadow-blue-600/30">
             <code className="text-white font-bold text-xl">&lt;/&gt;</code>
           </div> */}
-          <h1 className="text-4xl font-bold text-white mb-2 tracking-tight">CodeFlow</h1>
+          <h1 className="text-4xl font-bold text-primary mb-2 tracking-tight">TALENT IQ</h1>
           <p className="text-gray-400 text-sm font-medium">Collaborative Code Interviews & Practice</p>
         </div>
 
@@ -125,7 +125,7 @@ const Register = ({ onRegisterSuccess }) => {
                 Full Name
               </label>
               <div className="relative group">
-                <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 group-focus-within:text-blue-400 transition-colors" />
+                <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 group-focus-within:text-primary transition-colors" />
                 <input
                   type="text"
                   id="name"
@@ -144,7 +144,7 @@ const Register = ({ onRegisterSuccess }) => {
                 Email Address
               </label>
               <div className="relative group">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 group-focus-within:text-blue-400 transition-colors" />
+                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 group-focus-within:text-primary transition-colors" />
                 <input
                   type="email"
                   id="email"
@@ -163,7 +163,7 @@ const Register = ({ onRegisterSuccess }) => {
                 Password
               </label>
               <div className="relative group">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 group-focus-within:text-blue-400 transition-colors" />
+                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 group-focus-within:text-primary transition-colors" />
                 <input
                   type={showPassword ? "text" : "password"}
                   id="password"
@@ -172,7 +172,7 @@ const Register = ({ onRegisterSuccess }) => {
                   onChange={onChange}
                   placeholder="••••••••"
                   required
-                  className="w-full pl-12 pr-12 py-3 bg-gray-800/50 border border-gray-700/50 rounded-lg text-white placeholder-gray-600 focus:outline-none focus:border-blue-500/50 focus:bg-gray-800/80 focus:ring-2 focus:ring-blue-500/20 transition-all"
+                  className="w-full pl-12 pr-12 py-3 bg-gray-800/50 border border-gray-700/50 rounded-lg text-white placeholder-gray-600 focus:outline-none focus:border-primary/50 focus:bg-gray-800/80 focus:ring-2 focus:ring-primary/20 transition-all"
                 />
                 <button
                   type="button"
@@ -187,7 +187,7 @@ const Register = ({ onRegisterSuccess }) => {
             <button
               type="submit"
               disabled={loading || success}
-              className="w-full py-3 px-4 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 disabled:from-gray-700 disabled:to-gray-700 text-white font-semibold rounded-lg transition-all duration-300 transform hover:scale-[1.02] disabled:scale-100 disabled:cursor-not-allowed mt-2 flex items-center justify-center gap-2 shadow-lg shadow-blue-600/30 hover:shadow-blue-600/50"
+              className="w-full py-3 px-4 bg-primary hover:bg-primary/90 disabled:bg-gray-700 text-white font-semibold rounded-lg transition-all duration-300 transform hover:scale-[1.02] disabled:scale-100 disabled:cursor-not-allowed mt-2 flex items-center justify-center gap-2 shadow-lg shadow-primary/30 hover:shadow-primary/50"
             >
               {loading ? (
                 <>
@@ -222,7 +222,7 @@ const Register = ({ onRegisterSuccess }) => {
               Already have an account?{" "}
               <button
                 onClick={() => navigate('/login')}
-                className="text-blue-400 hover:text-blue-300 font-semibold transition-colors"
+                className="text-primary hover:text-primary/80 font-semibold transition-colors"
               >
                 Sign in here
               </button>
